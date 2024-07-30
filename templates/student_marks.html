@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Student Marks{% endblock %}
+{% block content %}
+    <h2 class="my-4">Marks for {{ student.name }}</h2>
+    <a href="{{ url_for('admin_index') }}" class="btn btn-secondary mb-4">Back to Admin Index</a>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Subject</th>
+                <th>Marks</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if marks %}
+                {% for mark in marks %}
+                <tr>
+                    <td>{{ mark.subject }}</td>
+                    <td>{{ mark.marks }}</td>
+                    <td>{{ mark.date }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_marks', mark_id=mark._id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form method="POST" action="{{ url_for('delete_marks', mark_id=mark._id) }}" style="display:inline; margin: 0; padding: 0;">
+                            <button type="submit" class="btn btn-danger btn-sm" >Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center">No marks found</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

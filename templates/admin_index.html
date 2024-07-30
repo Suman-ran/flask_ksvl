@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Admin Index{% endblock %}
+{% block content %}
+    <h2 class="my-4">Admin Index</h2>
+
+    <form method="GET" action="{{ url_for('admin_index') }}" class="form-inline mb-4">
+        <label for="grade" class="mr-2">Select Grade:</label>
+        <select id="grade" name="grade" class="form-control mr-3" onchange="this.form.submit()">
+            <option value="">-- All Grades --</option>
+            {% for grade in all_grades %}
+                <option value="{{ grade }}" {% if grade == selected_grade %}selected{% endif %}>{{ grade }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="roll_number" class="mr-2">Select Roll Number:</label>
+        <select id="roll_number" name="roll_number" class="form-control" onchange="this.form.submit()">
+            <option value="">-- All Roll Numbers --</option>
+            {% for roll_number in roll_numbers %}
+                <option value="{{ roll_number }}" {% if roll_number == selected_roll_number %}selected{% endif %}>{{ roll_number }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <a href="{{ url_for('add_student') }}" class="btn btn-primary mb-4">Add Student</a>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Grade</th>
+                <th>Name</th>
+                <th>Roll Number</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if student_data %}
+                {% for grade_group in student_data %}
+                    <tr class="table-primary">
+                        <td colspan="5"><strong>Grade: {{ grade_group._id }}</strong></td>
+                    </tr>
+                    {% for student in grade_group.students %}
+                        <tr>
+                            <td></td>
+                            <td><a href="{{ url_for('show_image', filename=student.photo) }}">{{ student.name }}</a></td>
+                            <td>{{ student.roll_number }}</td>
+                            <td>{{ student.email }}</td>
+                            <td>
+                                <a href="{{ url_for('edit_student', student_id=student._id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form method="POST" action="{{ url_for('delete_student', student_id=student._id) }}" style="display:inline; margin: 0; padding: 0;">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                                <a href="{{ url_for('add_marks', student_id=student._id) }}" class="btn btn-success btn-sm">Add Marks</a>
+                                <a href="{{ url_for('student_marks', student_id=student._id) }}" class="btn btn-info btn-sm">View Marks</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No data found</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}
