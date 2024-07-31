@@ -4,3 +4,4 @@ pymongo
 Flask-Bcrypt
 Flask-Login
 email_validator
+Gunicorn
