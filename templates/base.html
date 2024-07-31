@@ -12,13 +12,12 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-<!--            <a class="navbar-brand" href="{{ url_for('home') }}">Home</a>-->
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav mr-auto">
                     {% if current_user.is_authenticated %}
                         {% if current_user.email.endswith('@admin.com') %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('admin_index') }}">Admin Home</a>
+                                <a class="nav-link {% if request.endpoint == 'admin_index' %}font-weight-bold{% endif %}" href="{{ url_for('admin_index') }}">Admin Home</a>
                             </li>
                         {% endif %}
                         <li class="nav-item">
@@ -26,10 +25,10 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('admin_login') }}">Admin Login</a>
+                            <a class="nav-link {% if request.endpoint == 'admin_login' %}font-weight-bold{% endif %}" href="{{ url_for('admin_login') }}">Admin Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('student_login') }}">Student Login</a>
+                            <a class="nav-link {% if request.endpoint == 'student_login' %}font-weight-bold{% endif %}" href="{{ url_for('student_login') }}">Student Login</a>
                         </li>
                     {% endif %}
                 </ul>
