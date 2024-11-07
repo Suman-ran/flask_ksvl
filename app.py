@@ -10,7 +10,6 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, curren
 import os
 from werkzeug.utils import secure_filename
 from config import Config
-import json
 from wtforms import ValidationError
 
 app = Flask(__name__)
@@ -34,11 +33,11 @@ def email_not_exists(form, field):
         raise ValidationError('Email already exists. Please use a different email.')
 
 
-# Create indexes for students collection
-db.students.create_index([('grade', ASCENDING), ('roll_number', ASCENDING)])
-db.students.create_index('email')
-db.marks.create_index('student_id')
-db.admin.create_index('email')
+# # Create indexes for students collection
+# db.students.create_index([('grade', ASCENDING), ('roll_number', ASCENDING)])
+# db.students.create_index('email')
+# db.marks.create_index('student_id')
+# db.admin.create_index('email')
 
 
 # Admin User Model
@@ -122,7 +121,7 @@ def admin_login():
     form = AdminLoginForm()
     if form.validate_on_submit():
         admin = db.admin.find_one({'email': form.email.data, })
-        if admin and bcrypt.check_password_hash(admin['password_hash'], form.password.data):
+        if admin and admin['password_hash'] == form.password.data:
             login_user(Admin.from_mongo(admin))
             flash('Logged in successfully!', 'success')
             return redirect(url_for('admin_index'))
